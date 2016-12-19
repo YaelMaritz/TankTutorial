@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tanks.h"
-#include "TankPlayerController.h"
+#include "Public/Tank.h"
+#include "Public/TankPlayerController.h"
 
 // Begin Play
 void ATankPlayerController::BeginPlay()
@@ -23,7 +24,6 @@ void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick( DeltaTime );
 	AimAtCrosshair();
-
 }
 
 // Get a reference to the controlled ATank Pawn

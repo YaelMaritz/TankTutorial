@@ -2,13 +2,12 @@
 
 #pragma once
 
-#include "Tank.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h" // Must be the last include
 
-/**
- * 
- */
+// Forward decelerations
+class ATank;
+
 UCLASS()
 class TANKS_API ATankPlayerController : public APlayerController
 {

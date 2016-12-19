@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tanks.h"
-#include "TankBarrel.h"
-#include "TankAimingComponent.h"
+#include "Public/TankBarrel.h"
+#include "Public/TankAimingComponent.h"
 
 
 // Constructor
@@ -30,12 +30,19 @@ void UTankAimingComponent::AimAt(FVector LaunchHitLocation, float LaunchSpeed)
 
 	FVector LaunchVelocity; // OUT Parameter
 	FVector LaunchStartLocation = Barrel->GetSocketLocation(FName("Barrel Tip"));
-	if (UGameplayStatics::SuggestProjectileVelocity(this, LaunchVelocity, LaunchStartLocation, LaunchHitLocation, LaunchSpeed, false, ESuggestProjVelocityTraceOption::DoNotTrace))
+	if (UGameplayStatics::SuggestProjectileVelocity(this, LaunchVelocity, LaunchStartLocation, LaunchHitLocation, LaunchSpeed, ESuggestProjVelocityTraceOption::DoNotTrace))
 	{
 		auto AimDirection = LaunchVelocity.GetSafeNormal(); // Get a Unit-vector from a vector
 		MoveBarrel(AimDirection);
-
-		
+		auto TimeStamp = GetWorld()->GetTimeSeconds();
+		auto OwnerName = GetOwner()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("%f | %s: Aiming vector found"), TimeStamp, *OwnerName);
+	}
+	else
+	{
+		auto TimeStamp = GetWorld()->GetTimeSeconds();
+		auto OwnerName = GetOwner()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("%f | %s: Aiming vector NOT found"), TimeStamp, *OwnerName);
 	}
 }
 
