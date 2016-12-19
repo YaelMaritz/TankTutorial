@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tanks.h"
+#include "TankBarrel.h"
 #include "TankAimingComponent.h"
 
 
@@ -14,7 +15,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
@@ -22,7 +23,10 @@ void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
 void UTankAimingComponent::AimAt(FVector LaunchHitLocation, float LaunchSpeed)
 {
 	// protect the pointer
-	if (!Barrel) { return; }
+	if (!Barrel) { 
+		UE_LOG(LogTemp, Error, TEXT("NO Barrel"));
+		return; 
+	}
 
 	FVector LaunchVelocity; // OUT Parameter
 	FVector LaunchStartLocation = Barrel->GetSocketLocation(FName("Barrel Tip"));
@@ -41,6 +45,6 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimRotator - BarrelRotator; // Delta = Difference
-	UE_LOG(LogTemp, Warning, TEXT("Aiming rotator is %s"), *AimRotator.ToString());
-	// Move the barrel the correct segment every frame
+	
+	Barrel->Elevate(5); // TODO: Remove TEST number
 }

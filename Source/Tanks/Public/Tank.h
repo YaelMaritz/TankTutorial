@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h" // Put includes above generated!
 
+class UTankBarrel; // Forward Declaration 
+
 UCLASS()
 class TANKS_API ATank : public APawn
 {
@@ -13,7 +15,7 @@ class TANKS_API ATank : public APawn
 
 public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
+	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
 	void AimAt(FVector HitLocation);
 
