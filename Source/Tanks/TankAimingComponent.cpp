@@ -4,7 +4,7 @@
 #include "TankAimingComponent.h"
 
 
-// Sets default values for this component's properties
+// Constructor
 UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -14,30 +14,33 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-// Called every frame
-void UTankAimingComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
-{
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
-}
-
 void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
 
-void UTankAimingComponent::AimAt(FVector HitLocation)
+void UTankAimingComponent::AimAt(FVector LaunchHitLocation, float LaunchSpeed)
 {
-	auto ThisTankName = GetOwner()->GetName();
-	auto BarrelLocation = Barrel->GetComponentLocation().ToString();
+	// protect the pointer
+	if (!Barrel) { return; }
 
-	UE_LOG(LogTemp, Warning, TEXT("%s is aiming at %s from %s"), *ThisTankName, *HitLocation.ToString(), *BarrelLocation);
+	FVector LaunchVelocity; // OUT Parameter
+	FVector LaunchStartLocation = Barrel->GetSocketLocation(FName("Barrel Tip"));
+	if (UGameplayStatics::SuggestProjectileVelocity(this, LaunchVelocity, LaunchStartLocation, LaunchHitLocation, LaunchSpeed, false, ESuggestProjVelocityTraceOption::DoNotTrace))
+	{
+		auto AimDirection = LaunchVelocity.GetSafeNormal(); // Get a Unit-vector from a vector
+		MoveBarrel(AimDirection);
+
+		
+	}
+}
+
+void UTankAimingComponent::MoveBarrel(FVector AimDirection)
+{
+	// The difference between the Barrel Rotation and where it needs to be to hit.
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimRotator - BarrelRotator; // Delta = Difference
+	UE_LOG(LogTemp, Warning, TEXT("Aiming rotator is %s"), *AimRotator.ToString());
+	// Move the barrel the correct segment every frame
 }
