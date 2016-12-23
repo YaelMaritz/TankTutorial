@@ -34,14 +34,19 @@ protected:
 
 private:
 	/// Properties
-	UPROPERTY(EditAnywhere, Category = Firing)
-	float LaunchSpeed = 4000;
-
-	UPROPERTY(EditAnywhere, Category = TankSetup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
-	// Local Barrel ref for spawning projectile
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 4000;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSeconds = 3;
+
+	// Local Barrel reference for spawning projectile
 	UTankBarrel* Barrel = nullptr;
+
+	double LastFireTimeStamp = 0;
 
 	/// Methods
 	ATank();
