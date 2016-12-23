@@ -7,6 +7,7 @@
 
 // Forward Declarations
 class UTankBarrel; 
+class UTankTurret;
 class UTankAimingComponent;
 
 UCLASS()
@@ -15,20 +16,26 @@ class TANKS_API ATank : public APawn
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = TankSetup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
+	UFUNCTION(BlueprintCallable, Category = TankSetup)
+	void SetTurretReference(UTankTurret* TurretToSet);
+
 	void AimAt(FVector HitLocation);
+
+	UFUNCTION(BlueprintCallable, Category = Tank)
+	void Fire();
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
+	UPROPERTY(EditAnywhere, Category = Firing)
+	float LaunchSpeed = 4000;
+
 	ATank();
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, Category = Firing)
-	float LaunchSpeed = 100000; // TODO: Find a sensible default
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent*) override;
