@@ -39,16 +39,16 @@ void UTankAimingComponent::AimAt(FVector LaunchHitLocation, float LaunchSpeed)
 	if (UGameplayStatics::SuggestProjectileVelocity(this, LaunchVelocity, LaunchStartLocation, LaunchHitLocation, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace))
 	{
 		auto AimDirection = LaunchVelocity.GetSafeNormal(); // Get a Unit-vector from a vector (0,0,0 if shorter than unit)
-		MoveBarrel(AimDirection);
+		MoveCanon(AimDirection);
 	}
 }
 
-void UTankAimingComponent::MoveBarrel(FVector AimDirection)
+void UTankAimingComponent::MoveCanon(FVector AimDirection)
 {
-	// The difference between the Barrel Rotation and where it needs to be to hit.
-	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	// The difference between the Canon Rotator and where it needs to be to hit.
+	auto CanonRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = AimDirection.Rotation();
-	auto DeltaRotator = AimRotator - BarrelRotator; // Delta = Difference
+	auto DeltaRotator = AimRotator - CanonRotator; // Delta = Difference
 	
 	Barrel->Elevate(DeltaRotator.Pitch);
 	Turret->Turn(DeltaRotator.Yaw);

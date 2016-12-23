@@ -8,6 +8,7 @@
 // Forward Declarations
 class UTankBarrel; 
 class UTankTurret;
+class AProjectile;
 class UTankAimingComponent;
 
 UCLASS()
@@ -16,6 +17,7 @@ class TANKS_API ATank : public APawn
 	GENERATED_BODY()
 
 public:
+	/// Methods
 	UFUNCTION(BlueprintCallable, Category = TankSetup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
@@ -31,10 +33,19 @@ protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
+	/// Properties
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchSpeed = 4000;
 
+	UPROPERTY(EditAnywhere, Category = TankSetup)
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	// Local Barrel ref for spawning projectile
+	UTankBarrel* Barrel = nullptr;
+
+	/// Methods
 	ATank();
+
 	virtual void BeginPlay() override;
 
 	// Called to bind functionality to input
